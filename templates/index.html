@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+  <script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
+    
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+    
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+    
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+    </script>
+  <div class="topnav">
+    <a class="active" href="#home">Home</a>
+    <!-- link to family tree page -->
+    <a href="/upload"><div>Import</div></a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <div class="login-container">
+      <form action="/">
+        <button type="submit" value="go to create page">Create project</button>
+      </form>
+    </div>
+    <div class="login-container">
+      <form action="/">
+        <button type="submit" value="go to create project page">Open project</button>
+      </form>
+    </div>
+  </div>
+<div class="about-section">
+  <h1 id = "home" >Welcome to OpenK DATA CLEANSING</h1>
+  <p>  OpenK is a powerful tool for working with messy data: cleaning it; transforming it from one format into another; and extending it with web services and external data.</p>
+  <img src="{{url_for('static', filename='logo.png')}}" alt="logo" class = "responsive">
+</div>
+<div class="w3-container">
+  <div class="w3-panel w3-leftbar w3-sand">
+    <p class="w3-xxlarge w3-serif"></p>  
+  </div>
+</body>
+</html>
