@@ -6,11 +6,9 @@ from pathlib import Path
 import pymongo, io, csv, os, json, hashlib
 import pprint as p
 from utils import *
+import pandas as pd
 
-with open('User.json') as file:
-    data= json.load(file)
-    headings = list(list_of_keys_json(data))
-    values = list_of_values_json(data)
-    print(headings)
-    print(values)
-    
+df = pd.read_csv(
+    'ride_sharing_new.csv',
+)
+print(df.groupby(["station_A_name","station_B_name"]).first())

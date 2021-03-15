@@ -2,3 +2,5 @@ flask
 pymongo
 Flask-PyMongo
 urllib2_file
+pandas
+numpy

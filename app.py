@@ -6,6 +6,8 @@ from werkzeug.utils import secure_filename
 from pathlib import Path
 import pymongo, io, csv, os, json, hashlib
 from utils import *
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Testing" 
@@ -72,7 +74,7 @@ def data():
         f = request.form['csvfile']
         with open(f) as file:
             data = [] # load all data in to list "data"
-            if f.endswith('.csv'):
+            if f.endswith('.csv'): # if the open file is csv
                 csvfile = csv.reader(file)
                 edit = csv.writer(file)
                 for row in csvfile:
@@ -82,7 +84,7 @@ def data():
                 for i in range(1,len(data)):
                     values.append(data[i])
                 return render_template('data.html', data = data, headings = headings, values = values)
-            elif f.endswith('.json'):
+            elif f.endswith('.json'): #else if the open file is json
                 data = json.load(file)
                 headings = list_of_keys_json(data)
                 values = list_of_values_json(data)
