@@ -1,6 +1,102 @@
-<!DOCTYPE html>
 <html>
-{%for i in data%}
-{{i}}
-{%endfor%}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<style>
+.styled-table {
+  border-collapse: collapse;
+  margin: 0px 0px 0px 25px;
+  font-size: 0.9em;
+  font-family: Verdana;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+  border-bottom: thin solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+} 
+#myInput {
+  background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+</style>
+<body>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+  <script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
+    
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+    
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+    
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+    </script>
+
+  <div class="topnav">
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+    <div class="login-container">
+      <form action="/">
+        <button type="submit" value="project save">Save as a project</button>
+      </form>
+    </div>
+  </div>
+<table class="styled-table">
+    <thead>
+      <tr>
+        {% for x in headings%}
+        <th>{{ x }}</th>  
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in values%}
+      <tr>
+        {% for i in x%}
+        <td>{{i}}</td>
+        {% endfor %}
+      </tr>   
+      {%endfor%}  
+    </tbody>
+</table>
+</body>
 </html>

@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from pathlib import Path
 import pymongo, io, csv, os, json, hashlib
+from utils import *
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Testing" 
@@ -38,7 +39,7 @@ def create_user():
             mimetype="application/json"
         )
 
-##################################################
+
 @app.route("/users", methods=["GET"])
 def get_users():
     try:
@@ -58,7 +59,9 @@ def get_users():
             status = 500,
             mimetype="application/json"
         )
+##################################################
 
+#### upload file####
 @app.route('/upload', methods = ['GET' , 'POST'])
 def upload():
     return render_template('upload.html')
@@ -67,12 +70,23 @@ def upload():
 def data():
     if request.method == 'POST':
         f = request.form['csvfile']
-        data = []
         with open(f) as file:
-            csvfile = csv.reader(file)
-            for row in csvfile:
-                data.append(row)
-        return render_template('data.html', data = data)
+            data = [] # load all data in to list "data"
+            if f.endswith('.csv'):
+                csvfile = csv.reader(file)
+                edit = csv.writer(file)
+                for row in csvfile:
+                    data.append(row)
+                headings = data[0] # list of all headings
+                values = [] # list of all values 
+                for i in range(1,len(data)):
+                    values.append(data[i])
+                return render_template('data.html', data = data, headings = headings, values = values)
+            elif f.endswith('.json'):
+                data = json.load(file)
+                headings = list_of_keys_json(data)
+                values = list_of_values_json(data)
+                return render_template('data.html', data = data, headings = headings, values = values)
 
 @app.route("/")
 def home_page():
