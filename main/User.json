@@ -1,0 +1,25 @@
+[{
+  "_id": {
+    "$oid": "60498eb3e0858c39dc252f2d"
+  },
+  "name": "khuong",
+  "age": 22,
+  "phone": "123456788",
+  "email": "khuong@gmail.com"
+},{
+  "_id": {
+    "$oid": "60499384e0858c39dc252f2e"
+  },
+  "name": "nguyen",
+  "age": 22,
+  "phone": "123456789",
+  "email": "nguyen@gmail.com"
+},{
+  "_id": {
+    "$oid": "6049971be0858c39dc252f2f"
+  },
+  "name": "an",
+  "age": 22,
+  "phone": "123456789",
+  "email": ""
+}]

@@ -1,0 +1,112 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+</head>
+<style>
+#myInput {
+  background-image: url('/static/logo.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */  
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+</style>
+<body>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+  <script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
+    
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+    
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+    
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+    </script>
+
+  <div class="topnav">
+    <a class="active" href="/">Home</a>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for a keyword ..">
+    <div class="login-container">
+      <form action="/">
+        <button type="submit" value="project save">Save as a project</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="topnav">
+  <!-- <form method= "POST" class = "dropdown"> -->
+    <label for="keys">Choose a group option:</label>
+  <!-- co list cua 1 group = group_list -->
+  <!-- da lay duoc tat ca element trong 1 group, bay gio them vao javascript va kich function khi duoc goi -->
+    <select  id = "item1" name="Item 1">
+      {%for x in headings%}
+      <option value = " {{ x }} " > {{x}} </option>
+      {%endfor%}
+    </select>
+    <button onclick= "message()" > Confirm </button>
+
+  <!-- </form> -->
+  </div> 
+  <div id = "grouping">
+  {%for x in range(-1,group_list|length)%}
+  <p>Group of</p> 
+  {{group_list[x]}}
+  {%endfor%}
+  </div>
+
+
+  <table class="styled-table">
+    <thead>
+      <tr class = "table__header">
+        {% for x in headings%}
+        <th>{{ x }}</th>  
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in values%}
+      <tr class = "table__row">
+        {% for i in x%}
+        <td>{{i}}</td>
+        {% endfor %}
+      </tr>   
+      {%endfor%}  
+    </tbody>
+</table>
+
+{% block scripts %}
+<script>
+function message() {
+  var s = document.getElementById('item1');
+  let headings = {{headings|safe}};
+  if(s.value = "") {
+      alert("")
+  } else if(s.value = "day") {
+      alert("day")
+  }
+  else {
+    alert("none")
+  }
+}
+</script>
+{% endblock %}
+</body>
+</html>
