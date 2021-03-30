@@ -6,4 +6,4 @@
 
 # 3-15 demo front end and simple parse data file function
 
-#30/3 implement levensthen distance for clustering anomaly keys
+#30/3 implement levenshtein distance for clustering anomaly keys
