@@ -41,6 +41,7 @@
     }
     </script>
 
+
   <div class="topnav">
     <a class="active" href="/">Home</a>
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for a keyword ..">
@@ -67,7 +68,6 @@
   </div> 
   <div id = "grouping">
   {%for x in range(-1,group_list|length)%}
-  <p>Group of</p> 
   {{group_list[x]}}
   {%endfor%}
   </div>

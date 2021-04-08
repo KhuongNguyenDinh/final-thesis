@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 import csv
+from main.clustering import *
+from main.facet import *
 def flatten(lst):
     list_final = []
     for sublist in lst:
@@ -69,7 +71,6 @@ def group_by_key_csv(file,key_idx):
 def group_each_column(file):
     data =[]
     csvfile = csv.reader(file)
-    edit = csv.writer(file)
     for row in csvfile:
         data.append(row)
     headings = data[0] # list of all headings
@@ -81,3 +82,4 @@ def group_each_column(file):
         for j in range(0,len(headings)):
             group_list[i].append(values[i][j])
     return group_list
+

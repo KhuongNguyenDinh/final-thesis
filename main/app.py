@@ -77,8 +77,11 @@ def data():
             data = pd.read_csv(file) # load all data in to list "data"
             if f.endswith('.csv'): # if the open file is csv
                 headings = data.columns.tolist() # list of all headings
-                values = data.values.tolist() # list of all values 
-                group_list = data.groupby([headings[2]]).size()
+                values = data.values.tolist() # list of all values
+                group_list = []
+                for i in range(0,len(headings)-1):
+                    group_list.append(data[headings[i]].unique().tolist())
+                print(detect_cluster(4,group_list[5]))
                 return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list)
   
             elif f.endswith('.json'): #else if the open file is json
