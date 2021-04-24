@@ -1,59 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-</head>
-<body>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
-  <script>
-    //Get the button
-    var mybutton = document.getElementById("myBtn");
-    
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
-    
-    function scrollFunction() {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        mybutton.style.display = "block";
-      } else {
-        mybutton.style.display = "none";
-      }
-    }
-    
-    // When the user clicks on the button, scroll to the top of the document
-    function topFunction() {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    }
-    </script>
-  <div class="topnav">
-    <a class="active" href="#home">Home</a>
-    <!-- link to family tree page -->
-    <a href="/upload"><div>Import</div></a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <div class="login-container">
-      <form action="/">
-        <button type="submit" value="go to create page">Create project</button>
-      </form>
-    </div>
-    <div class="login-container">
-      <form action="/">
-        <button type="submit" value="go to create project page">Open project</button>
-      </form>
-    </div>
-  </div>
-<div class="about-section">
-  <h1 id = "home" >Welcome to OpenK DATA CLEANSING</h1>
-  <p>  OpenK is a powerful tool for working with messy data: cleaning it; transforming it from one format into another; and extending it with web services and external data.</p>
-  <img src="{{url_for('static', filename='logo.png')}}" alt="logo" class = "responsive">
-</div>
-<div class="w3-container">
-  <div class="w3-panel w3-leftbar w3-sand">
-    <p class="w3-xxlarge w3-serif"></p>  
-  </div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="webthemez">
+    <title>OpenK</title>
+	<!-- core CSS -->
+    <link href={{ url_for('static', filename="css/bootstrap.min.css") }} rel="stylesheet">
+    <link href={{ url_for('static', filename="css/font-awesome.min.css") }} rel="stylesheet">
+    <link href={{ url_for('static', filename="css/animate.min.css") }} rel="stylesheet"> 
+    <link href={{ url_for('static', filename="css/prettyPhoto.css" ) }}rel="stylesheet">
+    <link href={{ url_for('static', filename="css/styles.css") }} rel="stylesheet"> 
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href={{ url_for('static', filename="images/ico/favicon.ico") }}> 
+</head> 
+
+<body id="home">
+
+    <header id="header">
+        <nav id="main-nav" class="navbar navbar-default navbar-fixed-top" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/"><img src={{ url_for('static', filename="images/logo1.png") }} alt="logo"></a>
+                </div>
+				
+                <div class="collapse navbar-collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li class="scroll active"><a href="#home">Home</a></li> 
+                        <li class="scroll"><a href="/upload">Import</a></li>
+                        <li class="scroll"><a href="/convert">Convert</a></li>
+                        <li class="scroll"><a href="#about">About</a></li>
+                        <li class="scroll"><a href="#contact-us">Contact</a></li>                        
+                    </ul>
+                </div>
+            </div><!--/.container-->
+        </nav><!--/nav-->
+    </header><!--/header-->
+
+    <section id="hero-banner">
+             <div class="banner-inner">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                    <h2>Welcome to Open<sup>K<sup></h2>
+                                    <p>A powerful tool for working with messy data: viewing it; cleaning it; convert it from one format into another; and extending it with web services and external data.</p>
+                                    <a class="btn btn-primary btn-lg" href="https://github.com/KhuongNguyenDinh/OpenK-Data-Cleansing-system-using-Clustering-approach">Learn More</a>                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </section><!--/#main-slider-->
+ <section id="about">
+        <div class="container">
+
+            <div class="section-header">
+                <h2 class="section-title wow fadeInDown">About Clustering</h2>
+                <p class="wow fadeInDown"></p>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 wow fadeInLeft">
+                  <img class="img-responsive" src={{ url_for('static', filename="images/about.png" ) }} alt="">
+                </div>
+
+                <div class="col-sm-6 wow fadeInRight">
+                    <h3 class="column-title">Clustering methods</h3>
+                    <h1>Key collision</h1>
+                    <p><b>Fingerprint</b> is the least likely to produce false positives, so it’s a good place to start. It does the same kind of data-cleaning behind the scenes that you might think to do manually: fix whitespace into single spaces, put all uppercase letters into lowercase, discard punctuation, remove diacritics (e.g. accents) from characters, split up all strings (words) and sort them alphabetically (so Li, Zhong becomes “zhong li”). </p>
+                    <h1>Nearest neighbor</h1>
+                    <p><b>Levenshtein distance</b>: counts the number of edits required to make one value perfectly match another. As in the key collision methods above, it will do things like change uppercase to lowercase, fix whitespace, change special characters, etc. Each character that gets changed counts as 1 “distance.” “New York” and “newyork” have an edit distance value of 3 (“N” to “n”; “Y” to “y”; remove the space). It can do relatively advanced edits, such as understand the distance between “M. Makeba” and “Miriam Makeba” (5), but it may create false positives if these distances are greater than other, simpler transformations (such as the one-character distance to “B. Makeba,” another person entirely).</p>
+					<p><b>Prediction by partial matching</b> :  uses compression to see whether two values are similar or different. In practice, this method is very lax even for small radius values and tends to generate many false positives, but because it operates at a sub-character level it is capable of finding substructures that are not easily identifiable by distances that work at the character level. So it should be used as a “last resort” clustering method. It is also more effective on longer strings than on shorter ones. </p>
+                    <a class="btn btn-primary" href="/upload">Do it now!</a>
+                </div>
+            </div>
+        </div>
+    </section><!--/#about-->
+
+
+
+   
+   
+    <section id="our-team">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title wow fadeInDown">Team</h2>
+                <p class="wow fadeInDown">A huge contribution from:</p>
+            </div>
+			
+			 	
+            <div class="row text-center">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="team-member wow fadeInUp" data-wow-duration="400ms" data-wow-delay="0ms">
+                        <div class="team-img">
+                            <img class="img-responsive" src={{ url_for('static', filename="images/team/01.jpg" ) }} alt="face">
+                        </div>
+                        <div class="team-info">
+                            <h3>Khuong Nguyen</h3>
+                            <span>Undergraduate student</span> <br>
+                            <span>Falculty of Computer Science</span>
+                        </div> 
+                        <ul class="social-icons">
+                            <li><a href="https://www.facebook.com/profile.php?id=100008200908097"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://twitter.com/"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://myaccount.google.com/profile"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="https://www.linkedin.com/in/khuongnguyendinh/"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="https://github.com/KhuongNguyenDinh/OpenK-Data-Cleansing-system-using-Clustering-approach"><i class="fa fa-github"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!--/#our-team-->
+    <section class="testimonial-area" id="testimonial">
+    <section id="contact-us">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title wow fadeInDown">Contact</h2>
+                <p class="wow fadeInDown">Any furthur information or questions. Please make a contact with the form below!</p>
+            </div>
+        </div>
+    </section><!--/#contact-us-->
+
+
+    <section id="contact">
+        
+        <div class="container">
+            <div class="container contact-info">
+                <div class="row">
+				  <div class="col-sm-4 col-md-4">
+                        <div class="contact-form">
+                            <h3>Contact Info</h3>
+
+                            <address>
+                              <strong>Open<sub>K</sub>, Project.</strong><br>
+                              Falculty of Conputer Science and Engineer, Block A3, Bach Khoa University<br>
+                              268 Ly Thuong Kiet, District 10, Ho Chi Minh City<br>
+                              <abbr title="Phone">P:</abbr> Currently unavailable
+                            </address>
+					</div></div>
+                    <div class="col-sm-8 col-md-8">
+                        <div class="contact-form">
+                       
+                            <form id="main-contact-form" name="contact-form" method="post" action="#">
+                                <div class="form-group">
+                                    <input type="text" name="name" class="form-control" placeholder="Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+                                </div>
+                                <div class="form-group">
+                                    <textarea name="message" class="form-control" rows="8" placeholder="Message" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+   </section><!--/#bottom-->
+
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    &copy; 2021 Open<sup>K</sup> Project ---- KhuongNguyenDinh ----  <a target="_blank" href="/" title="">. Welcome to Open<sup>K</sup></a>
+                </div>
+                <div class="col-sm-6">
+                    <ul class="social-icons">
+                        <li><a href="https://facebook.com"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://myaccount.google.com/profile"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="https://www.linkedin.com/in/khuong-nguyen-78053218b/"><i class="fa fa-linkedin"></i></a></li> 
+                        <li><a href="https://youtube.com"><i class="fa fa-youtube"></i></a></li>
+                        <li><a href="https://github.com/KhuongNguyenDinh/OpenK-Data-Cleansing-system-using-Clustering-approach"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer><!--/#footer-->
+    <script src={{ url_for('static', filename="js/bootstrap.min.js") }}></script> 
+    <script src={{ url_for('static', filename="js/mousescroll.js") }}></script>
+    <script src={{ url_for('static', filename="js/smoothscroll.js") }}></script>
+    <script src={{ url_for('static', filename="js/jquery.prettyPhoto.js") }}></script>
+    <script src={{ url_for('static', filename="js/jquery.isotope.min.js") }}></script>
+    <script src={{ url_for('static', filename="js/jquery.inview.min.js") }}></script>
+    <script src={{ url_for('static', filename="js/wow.min.js") }}></script>
+    <script src={{ url_for('static', filename="js/custom-scripts.js") }}></script>
 </body>
 </html>

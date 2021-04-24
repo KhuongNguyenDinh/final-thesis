@@ -1,7 +1,7 @@
 import json
 import re
 import numpy as np
-
+from strsimpy import *
 def from_camel(attr):
     """convert thisAttrName to this_attr_name."""
     # Don't add an underscore for capitalized first letter

@@ -1,4 +1,5 @@
 <html>
+<head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
@@ -62,18 +63,18 @@
       <option value = " {{ x }} " > {{x}} </option>
       {%endfor%}
     </select>
-    <button onclick= "message()" > Confirm </button>
+    <button onclick= "message()" action="/group"> Confirm </button>
 
   <!-- </form> -->
-  </div> 
+  <!-- </div> 
   <div id = "grouping">
   {%for x in range(-1,group_list|length)%}
   {{group_list[x]}}
   {%endfor%}
-  </div>
+  </div> -->
 
 
-  <table class="styled-table">
+  <table class="styled-table" >
     <thead>
       <tr class = "table__header">
         {% for x in headings%}
@@ -97,13 +98,12 @@
 function message() {
   var s = document.getElementById('item1');
   let headings = {{headings|safe}};
-  if(s.value = "") {
-      alert("")
-  } else if(s.value = "day") {
-      alert("day")
-  }
-  else {
-    alert("none")
+  let group_list = {{group_list|safe}};
+  var i;
+  for(i = 0 ; i<headings.length; i++)
+  {
+    if s.val = headings[i]
+      {alert(group_list[i]);}
   }
 }
 </script>

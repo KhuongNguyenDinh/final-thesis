@@ -1,12 +1,12 @@
-* {box-sizing: border-box;}
+{box-sizing: border-box;}
 html {
   scroll-behavior: smooth;
 }
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Times New Roman', Times, serif;
   height: 10px; /* Used to enable scrolling */;
-  background: linear-gradient(55deg, #d6a02c7c 0%, #c7b137 51%, rgb(232, 44, 44), 80%, 54%) 85%;
+  /* background: linear-gradient(55deg, #d6a02c7c 0%, #c7b137 51%, rgb(232, 44, 44), 80%, 54%) 85%; */
 }
 
 .topnav {
@@ -28,7 +28,7 @@ body {
   border-collapse: collapse;
   margin: 25px 0;
   font-size: 0.9em;
-  font-family: sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
@@ -122,7 +122,7 @@ body {
   }
 }
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Times New Roman', Times, serif;
   margin: 0;
 }
 
@@ -145,8 +145,7 @@ html {
   margin-bottom: 16px;
   padding: 0 8px;
 }
-
-.card {
+.card:hover {
   margin-left: auto;
   margin-right: auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -154,28 +153,19 @@ html {
 }
 
 .about-section {
-  font-family: "Lucida Console", Courier, monospace;
-  font-size: 25px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 40px;
   padding: 100px;
   text-align: center;
-  background-color: #413e3af1;
-  color: white;
-}
-
-.about-section-2 {
-  font-weight: bold;
-  font-family: "Lucida Console", Courier, monospace;
-  font-size: 25px;
-  padding: 100px;
-  text-align: center;
-  background-image: url("Picture1.png");
+  /* background: linear-gradient(rgb(17, 4, 90), black); */
+  background-image: url("subhome.png");
+  background-size:cover;
   color: whitesmoke;
 }
 
 .container {
   padding: 0 16px;
 }
-
 .container::after, .row::after {
   content: "";
   clear: both;
@@ -209,7 +199,7 @@ html {
   }
 }
 
-body {font-family: Arial, Helvetica, sans-serif;}
+body {font-family: 'Times New Roman', Times, serif;}
 * {box-sizing: border-box;}
 
 input[type=text], select, textarea {
@@ -261,150 +251,3 @@ input[type=submit]:hover {
 #myBtn:hover {
   background-color: #555;
 }
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.monospace {
-  font-family: "Lucida Console", Courier, monospace;
-}
-#cf {
-  position:relative;
-  height:281px;
-  width:450px;
-  margin:0 auto;
-}
-
-#cf img {
-  position:absolute;
-  left:0;
-  -webkit-transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
-  -o-transition: opacity 1s ease-in-out;
-  transition: opacity 1s ease-in-out;
-}
-
-#cf img.top:hover {
-  opacity:0;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-/* Style The Dropdown Button */
-.dropbtn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-}
-
-/* The container <div> - needed to position the dropdown content */
-/* Navbar container */
-.navbar {
-  overflow: hidden;
-  background-color: #333;
-  font-family: Arial;
-}
-
-/* Links inside the navbar */
-.navbar a {
-  float: left;
-  font-size: 16px;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-/* The dropdown container */
-.dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-/* Dropdown button */
-.dropdown .dropbtn {
-  font-size: 16px;
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 16px;
-  background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
-}
-
-/* Add a red background color to navbar links on hover */
-.navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
-}
-
-/* Dropdown content (hidden by default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-/* Add a grey background color to dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-.bg-image {
-  /* The image used */
-  background-image: url("Picture1.png");
-
-  /* Add the blur effect */
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-/* Position text in the middle of the page/image */
-.bg-text {
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
-  color: white;
-  font-weight: bold;
-  border: 3px solid #f1f1f1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: 80%;
-  padding: 20px;
-  text-align: center;
-}
-/* Change the background color of the dropdown button when the dropdown content is shown */

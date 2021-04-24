@@ -72,29 +72,30 @@ def upload():
 @app.route('/data', methods = ['POST','GET'])
 def data():
     if request.method == 'POST':
-        f = request.form['csvfile']
-        with open(f) as file:
-            data = pd.read_csv(file) # load all data in to list "data"
+        f = request.form['file']
+        with open(f,encoding = "utf8") as file:
             if f.endswith('.csv'): # if the open file is csv
+                data = pd.read_csv(file) # load all data in to list "data"
                 headings = data.columns.tolist() # list of all headings
                 values = data.values.tolist() # list of all values
-                group_list = []
+                group_list = [] # list of all unique values in group
                 for i in range(0,len(headings)-1):
                     group_list.append(data[headings[i]].unique().tolist())
-                print(detect_cluster(4,group_list[5]))
                 return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list)
   
             elif f.endswith('.json'): #else if the open file is json
                 data = pd.read_json(file)
                 headings = data.columns.tolist() # list of all headings
                 values = data.values.tolist() # list of all values
-                for i in values:
-                    if isinstance(i,ObjectId):
-                        i = str(i)
-                group_id = []
-                for x in headings:
-                    group_id.append(x)
-                return render_template('data.html', data = data, headings = headings, values = values)
+                group_list = []
+                for i in range(1,len(headings)-1):
+                    group_list.append(data[headings[i]].unique().tolist())
+                return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list)
+
+@app.route('/convert', methods = ['GET' , 'POST'])
+def converter():
+    return render_template('convert.html')
+
 
 @app.route("/")
 def home_page():
