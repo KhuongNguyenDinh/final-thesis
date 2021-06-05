@@ -1,23 +1,27 @@
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
 </head>
 <style>
-#myInput {
-  background-image: url('/static/logo.png'); /* Add a search icon to input */
-  background-position: 10px 12px; /* Position the search icon */
-  background-repeat: no-repeat; /* Do not repeat the icon image */
-  width: 100%; /* Full-width */
-  font-size: 16px; /* Increase font-size */
-  padding: 12px 20px 12px 40px; /* Add some padding */  
-  border: 1px solid #ddd; /* Add a grey border */
-  margin-bottom: 12px; /* Add some space below the input */
-}
-</style>
+  #myInput {
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */  
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+  }
+  </style>
 <body>
   <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
   <script>
@@ -44,11 +48,13 @@
 
 
   <div class="topnav">
-    <a class="active" href="/">Home</a>
-    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for a keyword ..">
+    <a class="active" href="/">Home</a> 
+    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="Search for a keyword">
     <div class="login-container">
       <form action="/">
-        <button type="submit" value="project save">Save as a project</button>
+        <button type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="top" data-content="This will create an replica of a dataset and works on the copied one!">
+          Save as a project
+        </button>
       </form>
     </div>
   </div>
@@ -63,20 +69,14 @@
       <option value = " {{ x }} " > {{x}} </option>
       {%endfor%}
     </select>
-    <button onclick= "message()" action="/group"> Confirm </button>
-
-  <!-- </form> -->
-  <!-- </div> 
-  <div id = "grouping">
-  {%for x in range(-1,group_list|length)%}
-  {{group_list[x]}}
-  {%endfor%}
-  </div> -->
-
-
-  <table class="styled-table" >
+    <form method = post action = "cluster">
+      <button type = "submit"> Confirm </button>
+    </form>
+  <h4> Dataset contains <b style="color: red;">{{headings|length}}</b> columns and <b style="color: red;">{{data|length}}</b> rows</h4>
+  <div class="table-responsive">
+  <table class="table table-dark table-sm table-striped table-bordered" id = "table">
     <thead>
-      <tr class = "table__header">
+      <tr>
         {% for x in headings%}
         <th>{{ x }}</th>  
         {%endfor%}
@@ -84,7 +84,7 @@
     </thead>
     <tbody>
       {% for x in values%}
-      <tr class = "table__row">
+      <tr>
         {% for i in x%}
         <td>{{i}}</td>
         {% endfor %}
@@ -93,20 +93,25 @@
     </tbody>
 </table>
 
+
+
 {% block scripts %}
 <script>
-function message() {
-  var s = document.getElementById('item1');
-  let headings = {{headings|safe}};
-  let group_list = {{group_list|safe}};
-  var i;
-  for(i = 0 ; i<headings.length; i++)
-  {
-    if s.val = headings[i]
-      {alert(group_list[i]);}
-  }
-}
+function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("table");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) { if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {found = true;}}
+        if (found) {
+            tr[i].style.display = "";
+            found = false;} 
+        else {tr[i].style.display = "none";}}}
 </script>
 {% endblock %}
+
 </body>
 </html>

@@ -6,12 +6,27 @@
   <link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
 </head>
 <h1>Import new file</h1>
-<h3>Extension: csv, json, bson </h3>
+<h3>Extension: csv, json, tsv </h3>
 <div class = "">
 <form method=post action="data">
   <input type="file" name="file" value ="">
   <input type="submit" name = "" value="Submit">
+</form>
+<p>OR</p>
+<h1> Directly from Azure Cosmos DB </h1>
+<form action = "{{url_for("upload")}}" method="POST" >
+  endpoint : <input type="text" name="endpoint"><br><br>
+  key : <input type="text" name="key"><br><br>
+  DB_name : <input type="text" name="DB_name"><br><br>
+  Container_name : <input type="text" name="Container_name"><br><br>
+  Partition_key : <input type="text" name="Partition_key"><br><br>
+  <input type="submit" value="Submit">
 </form>
 </div>

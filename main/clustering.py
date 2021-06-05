@@ -1,7 +1,11 @@
 import numpy as np
 import string
-import fingerprints
+import re, string
+from unidecode import unidecode
 from strsimpy import *
+import fingerprints
+
+PUNCTUATION = re.compile('[%s]' % re.escape(string.punctuation))
 
 def flatten(lst):
     list_final = []
@@ -13,7 +17,7 @@ def flatten(lst):
             list_final.append(sublist)
     return list_final
 
-class knn():
+class knn(object):
     def __init__(self, group, radius):
         self.group = group
         self.radius = radius
@@ -48,17 +52,54 @@ class knn():
     def partial_match(self):
         return NotImplemented
 
-class key_collision():
-    def __init__(self, group):
-        self.group = group
-        
-    def fingerprint(self):
-        self.cluster = []
-        for i in range(0, len(self.group)):
-            for j in range(i+1, len(self.group)):
-                if fingerprints.generate(self.group[i]) == fingerprints.generate(self.group[j]):
-                    self.cluster.append([self.group[i],self.group[j]])
-        return self.cluster
 
-    def ngram_fingerprint(self):
-        return NotImplemented
+class Fingerprinter(object):
+    def __init__(self, string):
+        self.string = self._preprocess(string)
+
+    def _preprocess(self, string):
+        return PUNCTUATION.sub('', string.strip().lower())
+
+    def _latinize(self, string):
+        return unidecode(string.encode().decode('utf-8'))
+
+    def _unique_preserving_order(self, seq):
+        seen = set()
+        seen_add = seen.add
+        return [x for x in seq if not (x in seen or seen_add(x))]
+
+    def get_fingerprint(self):
+        return fingerprints.generate(self.string)
+
+    def get_ngram_fingerprint(self, n=1):
+        return self._latinize(''.join(
+            self._unique_preserving_order(
+                sorted([self.string[i:i + n] for i in range(len(self.string) - n + 1)])
+            )
+        ))
+
+if __name__ == '__main__':
+    # f = Fingerprinter('Tom Cruise')
+    # print(f.get_fingerprint())
+    # print(f.get_ngram_fingerprint(n=3))
+    # a = fingerprints.generate('khương, đình nguyễn')
+    # d = fingerprints.generate('khuong, dinh nguyen')
+    # a1 = fingerprints.generate('khương, nguyễn đình')
+    # f = Fingerprinter('khương, đình nguyễn')
+    a = Fingerprinter('khuong nguyen dinh')
+    b = Fingerprinter('khương, nguyễn đình')
+    c = Fingerprinter('khuong, dinh nguyen')
+    # a = Fingerprinter('Kryzysztof')
+    # b = Fingerprinter('Krzystof')
+    print (a.get_fingerprint())
+    # print(d)
+    # print(a1)
+    # print (f.get_fingerprint())
+    print (b.get_fingerprint())
+    print (c.get_fingerprint())    
+    # print (c.get_ngram_fingerprint(n=1))
+    # print (a.get_ngram_fingerprint(n=1))
+    # print (b.get_ngram_fingerprint(n=1))
+    # f = Fingerprinter('Paris')
+    # print f.get_fingerprint()
+    # print f.get_ngram_fingerprint(n=2)

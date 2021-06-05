@@ -1,5 +1,5 @@
 <!doctype html>
-<title>Import new file</title>
+<title>Choose target file</title>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -7,11 +7,54 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
 </head>
-<h1>Converter</h1>
-<h3>Extension: csv, json, bson </h3>
-<div class = "">
-<form method=post action="convert_file">
-  <input type="file" name="convert_file" value ="">
-  <input type="submit" name = "" value="Convert">
-</form>
-</div>
+<body>
+  <div>
+     <h1>File convert tool</h1>
+     <h2>Upload new File</h2>
+     <form method=post enctype=multipart/form-data>
+         <p><input type=file name=file>
+             <input type=submit value=Upload>
+     </form>
+  </div>
+</body>
+<script>
+   // convert csv to json
+function csvJSON(csvText) {
+  let lines = [];
+  const linesArray = csvText.split('\n');
+  // for trimming and deleting extra space 
+  linesArray.forEach((e) => {
+      const row = e.replace(/[\s]+[,]+|[,]+[\s]+/g, ',').trim();
+      lines.push(row);
+  });
+  // for removing empty record
+  lines.splice(lines.length - 1, 1);
+  const result = [];
+  const headers = lines[0].split(",");
+
+  for (let i = 1; i < lines.length; i++) {
+
+      const obj = {};
+      const currentline = lines[i].split(",");
+
+      for (let j = 0; j < headers.length; j++) {
+      obj[headers[j]] = currentline[j];
+      }
+      result.push(obj);
+}
+//return result; //JavaScript object
+// return JSON.stringify(result); //JSON
+return result;
+}
+
+// For Reading CSV File
+function readCSV(event) {
+const reader = new FileReader();
+reader.readAsText(event.files[0]);
+reader.onload = () => {
+    const text = reader.result;
+    const csvToJson = this.csvJSON(text);
+    console.log(csvToJson);
+};
+}
+</script>
