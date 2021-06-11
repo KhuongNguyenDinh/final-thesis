@@ -3,4 +3,5 @@
 # data cleansing web application
 # 3-15 demo front end and simple parse data file function
 # 26/4 improve front end and implemented all available cleansing algorithms
+# 5/6 update azure cosmos database in order to treat with real estate dataset
 
