@@ -11,6 +11,9 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/colresizable/1.6.0/colResizable-1.6.min.js" integrity="sha512-pMZ2rgWRGMywzbRAVwGk+auTREN0ldKKjACUSB4cneTgD3kn/6pu//Lxi4l8xSRkY83HENr1vztTnGDySWs0Mg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>  
 </head>
 <body>
 
@@ -43,11 +46,8 @@
     </div> 
   </div>
 
-  <div class="topnav">
-  <!-- <form method= "POST" class = "dropdown"> -->
+  <div class="topn
     <label for="keys">Choose a group option:</label>
-  <!-- co list cua 1 group = group_list -->
-  <!-- da lay duoc tat ca element trong 1 group, bay gio them vao javascript va kich function khi duoc goi -->
     <select  id = "item1" name="Item 1">
       {%for x in headings%}
       <option value = " {{ x }} " > {{x}} </option>
@@ -63,7 +63,7 @@
     <thead>
       <tr>
         {% for x in headings%}
-        <th>{{ x }}</th>  
+        <th>{{ x }}</th>
         {%endfor%}
       </tr>
     </thead>
@@ -85,8 +85,12 @@
 $(document).ready( function () {
     $('table').DataTable();
 } );
+$(function(){
+  $("table").colResizable();
+});
 </script>
 {% endblock %}
- 
+
+
 </body>
 </html>

@@ -124,6 +124,7 @@ def data():
                 data = pd.read_csv(file) # load all data in to list "data"
             elif f.endswith('.json'): #else if the open file is json
                 data = pd.read_json(file)
+
             headings = data.columns.tolist() # list of all headings
             values = data.values.tolist() # list of all values
             group_list = [] # list of all unique values in group

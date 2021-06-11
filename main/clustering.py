@@ -27,7 +27,6 @@ class knn(object):
         for i in range(0,len(self.group)):
             for j in range(i+1, len(self.group)):
                 if self.radius >= Levenshtein.distance(self,self.group[i].lower(),self.group[j].lower()):
-                # if self.radius >= Damerau.distance(self,(self.group[i]).lower(),(self.group[j]).lower()):
                     self.cluster.append([self.group[i],self.group[j]])
         return self.cluster
 
