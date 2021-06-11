@@ -23,27 +23,39 @@ def flatten(lst):
     return list_final
 with open('airlines_final.csv') as f:
     data = pd.read_csv(f) # load all data in to list "data"
+    shape = data.shape
+    describe = data.describe()
+    idx = data.index
     headings = data.columns.tolist() # list of all headings
     values = data.values.tolist() # list of all values 
     group_list = []
     for i in range(0,len(headings)-1):
         group_list.append(data[headings[i]].unique().tolist())
-    a = knn(group_list[5],int(input("radius: ")))
+    print(type(data[headings[-1]].value_counts().to_json()))
+
+#### TO SELECT SPECIFIC COLUMN ####
+    spec = data[data[headings[2]] == "Friday"]
+    # subset = [headings[2],headings[3],headings[4]]
+    # multi = data[subset]
+    # print(spec)
+
+
+    # a = knn(group_list[5],int(input("radius: ")))
     # print(levenshtein("ly thuong kiet","Lý Thường Kiệt"))
     # print(group_list[5])
     # print(a.levenshtein())
     # print(b.fingerprint())
     # print(data['dest_size'].value_counts())
     # del a
-f = Fingerprinter('ly thuong kiet')
-f1 = Fingerprinter('Lý Thường Kiệt')
+# f = Fingerprinter('ly thuong kiet')
+# f1 = Fingerprinter('Lý Thường Kiệt')
 # f3 = fingerprints.generate("duong 3 tháng 2")
 # f4 = fingerprints.generate("3 thang 2")
 # f5 = fingerprints.generate("ba thang hai")
 # text = "Vị trí nhà cách 20m ra mặt ngõ lớn 279 Đội Cấn, đường ô tô tránh, cả ngõ có 5-6 nhà. Tương lai mở rộng ngõ 279 nhà cách ngõ vài mét ( sau này ngõ 279 thành phố Đại Yên) giá trị nhà tăng chóng mặt. Diện tích 38m2, xây 05 tầng, mặt tiền rộng 4,1m, nhà còn rất mới, phù hợp cho việc vừa ở vừa kinh doanh, hoặc cho thuê văn phòng.Nhà chủ nhà tự xây, khung BTCT chắc chắn, thiết kế hiện đại+Tầng 1: 1 Phòng rộng + bếp + vs.+ Tầng 2: P khách + 1 ngủ + vs.+ Tầng 3+4: Mỗi tầng 2 ngủ + vs.+ Tầng 5: P. Thờ + sân phơi.Sổ đỏ chính chủ, pháp lý rõ ràng, sẵn sang giao dịchGiá: 4.7 tỷ có thương lượng cho khách có thiện trí.Liên Hệ: Thanh Tùng: 0912142902. Quý khách gọi ngay để được tư vấn nhiệt tình và xem nhà miễn phí. Nhà mới, ở ngay, ngõ nông, kinh doanh, cho thuê của hàng, văn phòng, Đội Cấn, Ba Đình "
 # f6 = fingerprints.generate(text.encode("utf-8","strict"))
-print(f.get_fingerprint())
-print(f1.get_fingerprint())
+# print(f.get_fingerprint())
+# print(f1.get_fingerprint())
 # print(f3)
 # print(f4)
 # print(f5)

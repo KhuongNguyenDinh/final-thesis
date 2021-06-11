@@ -9,54 +9,38 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 </head>
-<style>
-  #myInput {
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */  
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-  }
-  </style>
 <body>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
-  <script>
-    //Get the button
+
+<button style="opacity: 0.2;" onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+<script>
     var mybutton = document.getElementById("myBtn");
-    
-    // When the user scrolls down 20px from the top of the document, show the button
     window.onscroll = function() {scrollFunction()};
-    
     function scrollFunction() {
       if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         mybutton.style.display = "block";
       } else {
         mybutton.style.display = "none";
       }
-    }
-    
-    // When the user clicks on the button, scroll to the top of the document
+    }  
     function topFunction() {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     }
-    </script>
+</script>
 
 
   <div class="topnav">
     <a class="active" href="/">Home</a> 
-    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="Search for a keyword">
-    <div class="login-container">
-      <form action="/">
-        <button type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="top" data-content="This will create an replica of a dataset and works on the copied one!">
+    <div class="login-container"> 
+      <form method = POST action="project">
+        <button type="submit">
           Save as a project
         </button>
       </form>
-    </div>
+    </div> 
   </div>
 
   <div class="topnav">
@@ -72,9 +56,10 @@
     <form method = post action = "cluster">
       <button type = "submit"> Confirm </button>
     </form>
+
   <h4> Dataset contains <b style="color: red;">{{headings|length}}</b> columns and <b style="color: red;">{{data|length}}</b> rows</h4>
   <div class="table-responsive">
-  <table class="table table-dark table-sm table-striped table-bordered" id = "table">
+  <table class="table table-sm table-striped table-bordered" id = "table">
     <thead>
       <tr>
         {% for x in headings%}
@@ -97,21 +82,11 @@
 
 {% block scripts %}
 <script>
-function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("table");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        for (j = 0; j < td.length; j++) { if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {found = true;}}
-        if (found) {
-            tr[i].style.display = "";
-            found = false;} 
-        else {tr[i].style.display = "none";}}}
+$(document).ready( function () {
+    $('table').DataTable();
+} );
 </script>
 {% endblock %}
-
+ 
 </body>
 </html>

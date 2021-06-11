@@ -46,7 +46,6 @@ def create_user():
             mimetype = "application/json"
         )
     except Exception as ex:
-        print(ex)
         return Response(
             response= json.dumps({"message":"Can not insert", "id":f"{dbResponse.inserted_id}"}),
             status = 200,
@@ -84,7 +83,7 @@ def upload():
         client = CosmosClient(endpoint, key)
         database_name = request.form.get("DB_name")
         database = client.create_database_if_not_exists(id=database_name)
-        container_name = request.form.get("Container_name")
+        container_name = request.form.get("Container_name") 
         container = database.create_container_if_not_exists(
         id=container_name, 
         partition_key=PartitionKey(path=request.form.get("Partition_key")),
@@ -123,18 +122,13 @@ def data():
         with open(f,encoding = "utf8") as file:
             if f.endswith('.csv'): # if the open file is csv
                 data = pd.read_csv(file) # load all data in to list "data"
-                headings = data.columns.tolist() # list of all headings
-                values = data.values.tolist() # list of all values
-                group_list = [] # list of all unique values in group
-                for i in range(0,len(headings)-1):
-                    group_list.append(data[headings[i]].unique().tolist())
             elif f.endswith('.json'): #else if the open file is json
                 data = pd.read_json(file)
-                headings = data.columns.tolist() # list of all headings
-                values = data.values.tolist() # list of all values
-                group_list = []
-                for i in range(1,len(headings)-1):
-                    group_list.append(data[headings[i]].unique().tolist())
+            headings = data.columns.tolist() # list of all headings
+            values = data.values.tolist() # list of all values
+            group_list = [] # list of all unique values in group
+            for i in range(0,len(headings)-1):
+                group_list.append(data[headings[i]].unique().tolist())
             return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list)    
 
 @app.route('/convert', methods = ['GET' , 'POST'])
@@ -173,6 +167,9 @@ def convert(path, filename):
 def uploaded_file(filename):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
 
+@app.route('/project', methods = ['POST','GET'])
+def project():
+    return render_template("project.html")
 
 mongo = PyMongo(app)
 if __name__  == "__main__":
