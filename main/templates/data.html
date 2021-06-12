@@ -46,7 +46,7 @@
     </div> 
   </div>
 
-  <div class="topn
+  <div class="topnav">
     <label for="keys">Choose a group option:</label>
     <select  id = "item1" name="Item 1">
       {%for x in headings%}
@@ -56,10 +56,19 @@
     <form method = post action = "cluster">
       <button type = "submit"> Confirm </button>
     </form>
+  </div>
 
   <h4> Dataset contains <b style="color: red;">{{headings|length}}</b> columns and <b style="color: red;">{{data|length}}</b> rows</h4>
+<br>
+  <div>
+    <b>Toggle show/hide column:</b> 
+    {% for x in headings%}
+    <a class="toggle-vis" data-column="{{loop.index - 1}}">[{{x}}]</a>
+    {%endfor%}
+  </div>
+<br>
   <div class="table-responsive">
-  <table class="table table-sm table-striped table-bordered" id = "table">
+  <table class="table table-sm table-striped table-bordered display" id = "table">
     <thead>
       <tr>
         {% for x in headings%}
@@ -79,15 +88,17 @@
 </table>
 
 
-
 {% block scripts %}
 <script>
-$(document).ready( function () {
-    $('table').DataTable();
+$(document).ready(function() {
+    var table = $('table').DataTable( {
+    } );
+    $('a.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column( $(this).attr('data-column') );
+        column.visible( ! column.visible() );
+    } );
 } );
-$(function(){
-  $("table").colResizable();
-});
 </script>
 {% endblock %}
 

@@ -31,7 +31,8 @@ with open('airlines_final.csv') as f:
     group_list = []
     for i in range(0,len(headings)-1):
         group_list.append(data[headings[i]].unique().tolist())
-    print(type(data[headings[-1]].value_counts().to_json()))
+    a = (data[headings[5]].value_counts().to_json())
+    print(group_list[5])
 
 #### TO SELECT SPECIFIC COLUMN ####
     spec = data[data[headings[2]] == "Friday"]
