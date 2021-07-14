@@ -144,10 +144,11 @@ html {
   display: inline-block;
   padding: 8px;
   color: white;
-  background-color: #000;
+  background-color: green;
   text-align: center;
   cursor: pointer;
-  width: 100%;
+  width: 33%;
+  float: right;
 }
 
 .button:hover {

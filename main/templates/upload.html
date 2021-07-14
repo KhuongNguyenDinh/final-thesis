@@ -10,15 +10,17 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  
 </head>
+
 <h1>Import new file</h1>
 <h3>Extension: csv, json, tsv </h3>
-<div class = "">
 <form method=post action="data">
   <input type="file" name="file" value ="">
-  <input type="submit" name = "" value="Submit">
+  <input type="submit" value="Submit">
 </form>
+
+
+
 <p>OR</p>
 <h1> Directly from Azure Cosmos DB </h1>
 <form action = "{{url_for("upload")}}" method="POST" >
@@ -27,6 +29,6 @@
   DB_name : <input type="text" name="DB_name"><br><br>
   Container_name : <input type="text" name="Container_name"><br><br>
   Partition_key : <input type="text" name="Partition_key"><br><br>
+  Number of records: <input type="text" name="number"><br><br>
   <input type="submit" value="Submit">
 </form>
-</div>

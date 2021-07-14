@@ -12,60 +12,153 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/colresizable/1.6.0/colResizable-1.6.min.js" integrity="sha512-pMZ2rgWRGMywzbRAVwGk+auTREN0ldKKjACUSB4cneTgD3kn/6pu//Lxi4l8xSRkY83HENr1vztTnGDySWs0Mg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>  
+  <script src="{{url_for('static', filename='exportcsv.js')}}"></script>
 </head>
+
 <body>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
-  <script>
-    //Get the button
+<button style= "opacity: 0.2;" onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+<script>
     var mybutton = document.getElementById("myBtn");
-    // When the user scrolls down 20px from the top of the document, show the button
     window.onscroll = function() {scrollFunction()};
     function scrollFunction() {
       if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         mybutton.style.display = "block";
-      } else {
+      }else{
         mybutton.style.display = "none";
       }
-    }
-    // When the user clicks on the button, scroll to the top of the document
+    }  
     function topFunction() {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     }
-    </script>
-    
-    <h4> Dataset contains <b style="color: red;">{{headings|length}}</b> features and <b style="color: red;">{{data|length}}</b> data points</h4>
-    <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered" id = "table">
-      <thead>
-        <tr>
-          {% for x in headings%}
-          <th>{{ x }}</th>  
-          {%endfor%}
-        </tr>
-      </thead>
-      <tbody>
-        {% for x in values%}
-        <tr>
-          {% for i in x%}
-          <td>{{i}}</td>
-          {% endfor %}
-        </tr>   
-        {%endfor%}  
-      </tbody>
-  </table>
+</script>
+
+
+  <div class="topnav">
+    <a class="active" href="/">Home</a> 
+    <div class="login-container"> 
+      <form method = POST action="project">
+        <button type="submit">
+          Save as a project
+        </button>
+      </form>
+    </div> 
+  </div>
+
+  <!-- <form method = "POST">
+      <div class="topnav">
+    <select name="grouping">
+      {%for x in headings%}
+      <option value = "{{x}}" > {{x}} </option>
+      {%endfor%}
+    </select>
+      </div>
+    </form> -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg ">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"> <b> TEXT CLUSTERING </b></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          Grouping facet:<form method = "POST">
+          <select name="grouping">
+            {%for x in headings%}
+            <option value = "{{x}}" > {{x}} </option>
+            {%endfor%}
+          </select>
+          </form>
+          <br>
+          <form method = "POST" action = "{{url_for("data")}}">
+          Keying method:
+          <!-- request.form.get("methods") will work -->
+          <select ids = "methods" name = "cluster_method">
+            <optgroup label = "Clustering method">
+              <option value = "Fingerprint"> Fingerprint (Good to start) </option>
+              <option value = "N_gram"> N-gram Fingerprint </option>
+              <option value = "PPM" > Prediction by partial matching </option>
+            <optgroup label = "KNN method">
+              <option value = "Levenshtein" > Levenshtein Distance </option>
+              <option value = "Damerau" > Damerau-Levenshtein Distance </option>
+          </select>
+          <input type="submit" value="Submit" style="float: right;">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<h4> Dataset contains <b style="color: red;">{{headings|length}}</b> columns and <b style="color: red;">{{data|length}}</b> records</h4>
+<br>
+  <div>
+    <b>Toggle show column:</b> 
+    {% for x in headings%}
+    <a class="toggle-vis" data-column="{{loop.index - 1}}">[{{x}}]</a>
+    {%endfor%}
+  </div>
+<br>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Cluster </button>
+<button id="btnExportToCsv" type="button" class="btn btn-info btn-lg">Export to CSV</button>
+  <div class="table-responsive">
+  <table class="table table-sm table-striped table-bordered display" id = "table">
+    <thead>
+      <tr>
+        {% for x in headings%}
+        <th>{{ x }}</th>
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in values%}
+      <tr>
+        {% for i in x%}
+        <td>{{i}}</td>
+        {% endfor %}
+      </tr>
+      {%endfor%}
+    </tbody> 
+</table>
+
+<script>
+  const dataTable = document.getElementById("table");
+  const btnExportToCsv = document.getElementById("btnExportToCsv");
+
+  btnExportToCsv.addEventListener("click", () => {
+      const exporter = new TableCSVExporter(dataTable);
+      const csvOutput = exporter.convertToCSV();
+      const csvBlob = new Blob([csvOutput], { type: "text/csv" });
+      const blobUrl = URL.createObjectURL(csvBlob);
+      const anchorElement = document.createElement("a");
+
+      anchorElement.href = blobUrl;
+      anchorElement.download = "table-export.csv";
+      anchorElement.click();
+
+      setTimeout(() => {
+          URL.revokeObjectURL(blobUrl);
+      }, 500);
+  });
+</script>
 {% block scripts %}
 <script>
-$(document).ready( function () {
-    $('table').DataTable();
-} );
-$(function(){
-  $("table").colResizable();
+$(document).ready(function() {
+    var table = $('table').DataTable({ "lengthMenu": [[10, 25, 50, 100, 200, 500, 1000, -1],[10, 25, 50, 100, 200, 500, 1000, "All"]]});
+    $('a.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+    });
 });
 </script>
 {% endblock %}
+
 </body>
 </html>

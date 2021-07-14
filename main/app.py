@@ -11,6 +11,9 @@ from main.utils import *
 from markupsafe import escape
 import numpy as np
 import pandas as pd
+from strsimpy import *
+from main.clustering import *
+
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Testing" 
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
@@ -38,7 +41,7 @@ except:
 @app.route("/users",  methods=["POST"])
 def create_user():
     try:
-        user = {"name" : "khuong", "age" : "22"}
+        user = {}
         dbResponse = collection.insert_one(user)
         return Response(
             response= json.dumps({"message":"Successfully created", "id":f"{dbResponse.inserted_id}"}),
@@ -63,7 +66,6 @@ def get_users():
             mimetype="application/json"
         )
     except Exception as ex:
-        print(ex)
         return Response(
             response= json.dumps({"message":"Can not read", "id":f"{dbResponse.inserted_id}"}),
             status = 500,
@@ -83,13 +85,13 @@ def upload():
         client = CosmosClient(endpoint, key)
         database_name = request.form.get("DB_name")
         database = client.create_database_if_not_exists(id=database_name)
-        container_name = request.form.get("Container_name") 
+        container_name = request.form.get("Container_name")
         container = database.create_container_if_not_exists(
         id=container_name, 
         partition_key=PartitionKey(path=request.form.get("Partition_key")),
         offer_throughput=400
         )
-        query = "SELECT * FROM c OFFSET 0 LIMIT 5"
+        query = "SELECT * FROM c OFFSET 0 LIMIT " + str(request.form.get('number'))
         items = list(container.query_items(
         query=query,
         enable_cross_partition_query=True
@@ -109,28 +111,31 @@ def upload():
         return render_template('retrieve.html',data = data, headings = headings, values = values, group_list = group_list)
     return render_template('upload.html')
 
-
 @app.route('/cluster', methods = ['GET' , 'POST'])
 def cluster():
     return render_template('cluster.html', lst = cosmos_lst)
 
-
 @app.route('/data', methods = ['POST','GET'])
 def data():
-    if request.method == 'POST':
+    if request.method == "POST":
         f = request.form['file']
-        with open(f,encoding = "utf8") as file:
+        with open(f,encoding='utf-8') as file:
             if f.endswith('.csv'): # if the open file is csv
                 data = pd.read_csv(file) # load all data in to list "data"
             elif f.endswith('.json'): #else if the open file is json
                 data = pd.read_json(file)
-
+            elif f.endswith('.tsv'): #else if the open file is tsv
+                data = pd.read_csv(file, sep = '\t') 
+            elif f.endswith('.xlsx'): #else if the open file is xlsx
+                data = pd.xlsx(file, sep='|', encoding='latin-1')
             headings = data.columns.tolist() # list of all headings
             values = data.values.tolist() # list of all values
             group_list = [] # list of all unique values in group
             for i in range(0,len(headings)-1):
                 group_list.append(data[headings[i]].unique().tolist())
-            return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list)    
+            name = request.form.get('cluster_method')
+            print(name)
+    return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list) 
 
 @app.route('/convert', methods = ['GET' , 'POST'])
 def index():
@@ -149,11 +154,8 @@ def index():
             return redirect(url_for('uploaded_file', filename=filename))
     return render_template('convert.html')
 
-
 def process_file(path, filename):
     convert(path, filename)
-    # with open(path, 'a') as f:
-    #    f.write("\nAdded processed content")
 
 def convert(path, filename):
     input_file = open(path,'rb')
@@ -172,6 +174,14 @@ def uploaded_file(filename):
 def project():
     return render_template("project.html")
 
+@app.errorhandler(500)
+def internal_error(error):
+    return "Invalid input, try again!!!"
+
+@app.errorhandler(404)
+def not_found(error):
+    return "No Directory matches the satisfaction",404
+
 mongo = PyMongo(app)
-if __name__  == "__main__":
+if __name__  == "__main__" :
     app.run(port = 5000)

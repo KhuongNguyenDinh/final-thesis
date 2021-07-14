@@ -8,10 +8,9 @@ import pprint as p
 from clustering import *
 import pandas as pd
 import numpy as np
-from facet import *
-from clustering import *
 from bson import ObjectId
 import fingerprints
+
 def flatten(lst):
     list_final = []
     for sublist in lst:
@@ -21,6 +20,7 @@ def flatten(lst):
         else:
             list_final.append(sublist)
     return list_final
+    
 with open('airlines_final.csv') as f:
     data = pd.read_csv(f) # load all data in to list "data"
     shape = data.shape
@@ -31,11 +31,20 @@ with open('airlines_final.csv') as f:
     group_list = []
     for i in range(0,len(headings)-1):
         group_list.append(data[headings[i]].unique().tolist())
-    a = (data[headings[5]].value_counts().to_json())
     print(group_list[5])
+    lev_obj = knn(group_list[5], 3)
+    print(lev_obj.levenshtein())
+    dame_obj = knn(group_list[5], 3)
+    print(dame_obj.damerau())
+    finger_obj = fingerprint(group_list[5])
+    print(finger_obj)
+    jaro = similarity(group_list[5], 1)
+    jaro_obj = jaro.jaro()
+    print(jaro_obj)
+    
 
 #### TO SELECT SPECIFIC COLUMN ####
-    spec = data[data[headings[2]] == "Friday"]
+    # spec = data[data[headings[2]] == "Friday"]
     # subset = [headings[2],headings[3],headings[4]]
     # multi = data[subset]
     # print(spec)
