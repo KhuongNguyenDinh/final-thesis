@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 from strsimpy import *
 from main.clustering import *
-
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Testing" 
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
@@ -22,8 +21,14 @@ ALLOWED_EXTENSIONS = {'csv', 'tsv', 'json'}
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
-
 cosmos_lst = []
+
+def csv2json(data):
+	reader = csv.DictReader
+	reader = csv.DictReader(data)
+	out = json.dumps([ row for row in reader ])  
+	return out
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 ############### test connection ############
@@ -137,35 +142,24 @@ def data():
             print(name)
     return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list) 
 
-@app.route('/convert', methods = ['GET' , 'POST'])
-def index():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            print('No file attached in request')
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            print('No file selected')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            process_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), filename)
-            return redirect(url_for('uploaded_file', filename=filename))
-    return render_template('convert.html')
+@app.route('/csv2json', methods=["POST"])
+def c2j():
+	f = request.files['data_file']
+	if not f:
+		return "No file"
+	file_contents = StringIO(f.stream.read())
+	result = csv2json(file_contents)
+	response = make_response(result)
+	response.headers["Content-Disposition"] = "attachment; filename=Converted.json"
+	return response
+
+@app.route('/convert', methods= ["POST", "GET"])
+def convert():
+	return render_template('convert.html')
 
 def process_file(path, filename):
     convert(path, filename)
 
-def convert(path, filename):
-    input_file = open(path,'rb')
-    f = request.form['file']
-    with open(f,encoding = "utf8") as file:
-        if f.endswith('.csv'):
-            df = pd.read_csv(file)
-            output = df.to_json()
-        return output
-            
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)

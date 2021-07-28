@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from bson import ObjectId
 import fingerprints
+import datetime
 
 def flatten(lst):
     list_final = []
@@ -20,7 +21,7 @@ def flatten(lst):
         else:
             list_final.append(sublist)
     return list_final
-    
+begin_time = datetime.datetime.now()
 with open('airlines_final.csv') as f:
     data = pd.read_csv(f) # load all data in to list "data"
     shape = data.shape
@@ -32,15 +33,18 @@ with open('airlines_final.csv') as f:
     for i in range(0,len(headings)-1):
         group_list.append(data[headings[i]].unique().tolist())
     print(group_list[5])
-    lev_obj = knn(group_list[5], 3)
-    print(lev_obj.levenshtein())
-    dame_obj = knn(group_list[5], 3)
-    print(dame_obj.damerau())
-    finger_obj = fingerprint(group_list[5])
+    # lev_obj = knn(group_list[5], 3)
+    # print(lev_obj.levenshtein())
+    print(datetime.datetime.now() - begin_time)
+    # dame_obj = knn(group_list[5], 3)
+    # print(dame_obj.damerau())
+    a = Fingerprinter("æ")
+    print(a.get_fingerprint())
+    finger_obj = fingerprint("æ")
     print(finger_obj)
-    jaro = similarity(group_list[5], 1)
-    jaro_obj = jaro.jaro()
-    print(jaro_obj)
+    # jaro = similarity(group_list[5], 1)
+    # jaro_obj = jaro.jaro()
+    # print(jaro_obj)
     
 
 #### TO SELECT SPECIFIC COLUMN ####

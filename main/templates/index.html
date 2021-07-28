@@ -38,6 +38,7 @@
                         <li class="scroll"><a href="/upload">Import</a></li>
                         <li class="scroll"><a href="/convert">Convert</a></li>
                         <li class="scroll"><a href="#about">About</a></li>
+                        <li class="scroll"><a href="#our-team">Team</a></li>
                         <li class="scroll"><a href="#contact-us">Contact</a></li>                        
                     </ul>
                 </div>
@@ -74,10 +75,12 @@
                 <div class="col-sm-6 wow fadeInRight">
                     <h3 class="column-title">Clustering methods</h3>
                     <h1>Key collision</h1>
-                    <p><b>Fingerprint</b> is the least likely to produce false positives, so it’s a good place to start. It does the same kind of data-cleaning behind the scenes that you might think to do manually: fix whitespace into single spaces, put all uppercase letters into lowercase, discard punctuation, remove diacritics (e.g. accents) from characters, split up all strings (words) and sort them alphabetically (so Li, Zhong becomes “zhong li”). </p>
+                    <p><b>Fingerprint</b> is the least likely to produce false positives, so it’s a good place to start. It does the same kind of data-cleaning behind the scenes that you might think to do manually: fix whitespace into single spaces, put all uppercase letters into lowercase, discard punctuation, remove diacritics (e.g. accents) from characters, split up all strings (words) and sort them alphabetically . </p>
+                    <p><b>N-gram Fingerprint</b> is just like Fingerprint except we set for the n-gram parameter</p>
                     <h1>Nearest neighbor</h1>
-                    <p><b>Levenshtein distance</b>: counts the number of edits required to make one value perfectly match another. As in the key collision methods above, it will do things like change uppercase to lowercase, fix whitespace, change special characters, etc. Each character that gets changed counts as 1 “distance.” “New York” and “newyork” have an edit distance value of 3 (“N” to “n”; “Y” to “y”; remove the space). It can do relatively advanced edits, such as understand the distance between “M. Makeba” and “Miriam Makeba” (5), but it may create false positives if these distances are greater than other, simpler transformations (such as the one-character distance to “B. Makeba,” another person entirely).</p>
-					<p><b>Prediction by partial matching</b> :  uses compression to see whether two values are similar or different. In practice, this method is very lax even for small radius values and tends to generate many false positives, but because it operates at a sub-character level it is capable of finding substructures that are not easily identifiable by distances that work at the character level. So it should be used as a “last resort” clustering method. It is also more effective on longer strings than on shorter ones. </p>
+                    <p><b>Levenshtein distance</b>: counts the number of edits required to make one value perfectly match another.</p>
+					<p><b>Damerau-Levenshtein</b> : sane as Levenshtein except it has transposition. </p>
+                    <p><b>Hamming Distance</b>: Count the different in string with same length</p>
                     <a class="btn btn-primary" href="/upload">Do it now!</a>
                 </div>
             </div>
