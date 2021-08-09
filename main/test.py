@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, Response, make_response,json, request
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from pandas.core.indexing import IndexSlice
 from werkzeug.utils import secure_filename
 from pathlib import Path
 import pymongo, io, csv, os, json, hashlib
@@ -11,7 +12,33 @@ import numpy as np
 from bson import ObjectId
 import fingerprints
 import datetime
-
+def method_using(name,column,radius):
+    cluster = []
+    if name == "levenshtein":
+        obj = knn(column, radius)
+        cluster = obj.levenshtein()
+    elif name == "damerau":
+        obj =  knn(column, radius)
+        cluster = obj.damerau()
+    elif name == "hamming":
+        obj =  knn(column, radius)
+        cluster = obj.hamming()   
+    elif name == "jaro":
+        obj =  similarity(column, radius)
+        cluster = obj.jaro_sim()   
+    elif name == "jaro_winkler":
+        obj =  similarity(column, radius)
+        cluster = obj.jaro_sim()   
+    elif name == "levenshtein_sim":
+        obj =  similarity(column, radius)
+        cluster = obj.levenshtein_sim()   
+    elif name == "damerau_sim":
+        obj =  similarity(column, radius)
+        cluster = obj.damerau_sim()
+    elif name == "num_sim":    
+        obj =  similarity(column, radius)
+        cluster = obj.num_sim()        
+    return cluster   
 def flatten(lst):
     list_final = []
     for sublist in lst:
@@ -21,7 +48,7 @@ def flatten(lst):
         else:
             list_final.append(sublist)
     return list_final
-begin_time = datetime.datetime.now()
+# begin_time = datetime.datetime.now()
 with open('airlines_final.csv') as f:
     data = pd.read_csv(f) # load all data in to list "data"
     shape = data.shape
@@ -32,16 +59,27 @@ with open('airlines_final.csv') as f:
     group_list = []
     for i in range(0,len(headings)-1):
         group_list.append(data[headings[i]].unique().tolist())
-    print(group_list[5])
-    # lev_obj = knn(group_list[5], 3)
-    # print(lev_obj.levenshtein())
-    print(datetime.datetime.now() - begin_time)
+    print(method_using('levenshtein',group_list[5],3))
+    # print(cluster[2])
+    # for index in idx:
+    #     if data.loc[index,headings[5]] in cluster[1]:
+    #         data.loc[index,headings[5]] = "east us!"
+    #     print(data.loc[index, headings[5]])
+    # for index in idx:
+    # print(data)
+    # print(data[headings[5]].tolist())
+    a = (1,2,3)
+    print(sorted(a))
+    b = (1,3,2)
+    print(sorted(b))
+    print(a!=b)
+    # print(datetime.datetime.now() - begin_time)
     # dame_obj = knn(group_list[5], 3)
     # print(dame_obj.damerau())
-    a = Fingerprinter("æ")
-    print(a.get_fingerprint())
-    finger_obj = fingerprint("æ")
-    print(finger_obj)
+    # a = Fingerprinter("æ")
+    # print(a.get_fingerprint())
+    # finger_obj = fingerprint("æ")
+    # print(finger_obj)
     # jaro = similarity(group_list[5], 1)
     # jaro_obj = jaro.jaro()
     # print(jaro_obj)
@@ -61,14 +99,14 @@ with open('airlines_final.csv') as f:
     # print(b.fingerprint())
     # print(data['dest_size'].value_counts())
     # del a
-# f = Fingerprinter('ly thuong kiet')
-# f1 = Fingerprinter('Lý Thường Kiệt')
+f = Fingerprinter('ly thuong kiet')
+f1 = Fingerprinter('Lý Thường Kiệt')
 # f3 = fingerprints.generate("duong 3 tháng 2")
 # f4 = fingerprints.generate("3 thang 2")
 # f5 = fingerprints.generate("ba thang hai")
 # text = "Vị trí nhà cách 20m ra mặt ngõ lớn 279 Đội Cấn, đường ô tô tránh, cả ngõ có 5-6 nhà. Tương lai mở rộng ngõ 279 nhà cách ngõ vài mét ( sau này ngõ 279 thành phố Đại Yên) giá trị nhà tăng chóng mặt. Diện tích 38m2, xây 05 tầng, mặt tiền rộng 4,1m, nhà còn rất mới, phù hợp cho việc vừa ở vừa kinh doanh, hoặc cho thuê văn phòng.Nhà chủ nhà tự xây, khung BTCT chắc chắn, thiết kế hiện đại+Tầng 1: 1 Phòng rộng + bếp + vs.+ Tầng 2: P khách + 1 ngủ + vs.+ Tầng 3+4: Mỗi tầng 2 ngủ + vs.+ Tầng 5: P. Thờ + sân phơi.Sổ đỏ chính chủ, pháp lý rõ ràng, sẵn sang giao dịchGiá: 4.7 tỷ có thương lượng cho khách có thiện trí.Liên Hệ: Thanh Tùng: 0912142902. Quý khách gọi ngay để được tư vấn nhiệt tình và xem nhà miễn phí. Nhà mới, ở ngay, ngõ nông, kinh doanh, cho thuê của hàng, văn phòng, Đội Cấn, Ba Đình "
 # f6 = fingerprints.generate(text.encode("utf-8","strict"))
-# print(f.get_fingerprint())
+print(fingerprint(group_list[5]))
 # print(f1.get_fingerprint())
 # print(f3)
 # print(f4)

@@ -1,0 +1,71 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href={{ url_for('static', filename='styles.css') }}>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <script src="{{url_for('static', filename='exportcsv.js')}}"></script>
+</head>
+
+<body>
+<button style= "opacity: 0.2;" onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+<script>
+    var mybutton = document.getElementById("myBtn");
+    window.onscroll = function() {scrollFunction()};
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      }else{
+        mybutton.style.display = "none";
+      }
+    }  
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+</script>
+  <div class="topnav">
+    <a class="active" href="/">Home</a> 
+    <div class="login-container"> 
+      <form method = POST action="project">
+        <button type="submit">
+          Save as a project
+        </button>
+      </form>
+    </div> 
+  </div>
+
+
+
+{{cluster}}
+
+
+  <div class="table-responsive">
+  <table class="table table-sm table-striped table-bordered display" id = "table">
+    <thead>
+      <tr>
+        <th>Cluster # </th>
+        <th>Value In Cluster</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in cluster%}
+      <tr>
+        <td>{{loop.index}}</td>
+        <td>{{x}}</td>
+        <!-- <td contenteditable="True"></td> -->
+      </tr>
+      {%endfor%}
+    </tbody> 
+</table>
+<!-- <button onclick = "location.href= {{ url_for('data')}}" class="btn btn-info btn-lg">Cluster</button> -->
+
+</body>
+</html>

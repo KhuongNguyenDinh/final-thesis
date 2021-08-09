@@ -21,13 +21,28 @@ ALLOWED_EXTENSIONS = {'csv', 'tsv', 'json'}
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
+
+
+
+##GLOBAL VARIABLES###
+cluster_lst = []
 cosmos_lst = []
+method = ""
+req_col = ""
+req_rad = "0"
+headings = []
+values = []
+group_list = []
+#################
+
 
 def csv2json(data):
 	reader = csv.DictReader
 	reader = csv.DictReader(data)
 	out = json.dumps([ row for row in reader ])  
+	print("JSON parsed!")  
 	return out
+	print("JSON saved!")
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -41,6 +56,37 @@ try:
 except:
     print("ERROR - Unable to connect to Database")
 
+def method_using(name,column,radius):
+    cluster = []
+    if name == "levenshtein":
+        obj = knn(column, radius)
+        cluster = obj.levenshtein()
+    elif name == "damerau":
+        obj =  knn(column, radius)
+        cluster = obj.damerau()
+    elif name == "hamming":
+        obj =  knn(column, radius)
+        cluster = obj.hamming()   
+    elif name == "jaro":
+        obj =  similarity(column, radius)
+        cluster = obj.jaro_sim()   
+    elif name == "jaro_winkler":
+        obj =  similarity(column, radius)
+        cluster = obj.jaro_sim()   
+    elif name == "levenshtein_sim":
+        obj =  similarity(column, radius)
+        cluster = obj.levenshtein_sim()   
+    elif name == "damerau_sim":
+        obj =  similarity(column, radius)
+        cluster = obj.damerau_sim()
+    elif name == "num_sim":    
+        obj =  similarity(column, radius)
+        cluster = obj.num_sim()    
+    elif name == "fingerprint":
+        cluster = fingerprint(column)    
+    elif name == "n_gram":
+        cluster = fingerprint_ngram(column,radius) 
+    return cluster      
 
 ########### C R U D ###############
 @app.route("/users",  methods=["POST"])
@@ -108,17 +154,20 @@ def upload():
         jsonfile.truncate(0)
         jsonfile.write(cosmos_json)
         data = pd.read_json("jsontemp.json")
-        headings = data.columns.tolist() # list of all headings
-        values = data.values.tolist() # list of all values
-        group_list = []
-        for i in range(1,len(headings)-1):
-            group_list.append(data[headings[i]].unique().tolist())
-        return render_template('retrieve.html',data = data, headings = headings, values = values, group_list = group_list)
+        headings.clear()
+        values.clear()
+        group_list.clear()
+        headings_cosmos = data.columns.tolist() # list of all headings
+        headings.extend(headings_cosmos)
+        values_cosmos = data.values.tolist() # list of all values
+        values.extend(values_cosmos)
+        group_list_data = [] # list of all unique values in group
+        group_list.extend(group_list_data)
+        for i in range(1,len(headings_cosmos)-1):
+            group_list.append(data[headings_cosmos[i]].unique().tolist())
+        return render_template('retrieve.html',data = data, headings = headings_cosmos, values = values_cosmos, group_list = group_list)
     return render_template('upload.html')
 
-@app.route('/cluster', methods = ['GET' , 'POST'])
-def cluster():
-    return render_template('cluster.html', lst = cosmos_lst)
 
 @app.route('/data', methods = ['POST','GET'])
 def data():
@@ -133,21 +182,57 @@ def data():
                 data = pd.read_csv(file, sep = '\t') 
             elif f.endswith('.xlsx'): #else if the open file is xlsx
                 data = pd.xlsx(file, sep='|', encoding='latin-1')
-            headings = data.columns.tolist() # list of all headings
-            values = data.values.tolist() # list of all values
-            group_list = [] # list of all unique values in group
-            for i in range(0,len(headings)-1):
-                group_list.append(data[headings[i]].unique().tolist())
-            name = request.form.get('cluster_method')
-            print(name)
-    return render_template('data.html', data = data, headings = headings, values = values, group_list = group_list) 
+            headings.clear()
+            values.clear()
+            group_list.clear()
+            headings_data = data.columns.tolist() # list of all headings
+            headings.extend(headings_data)
+            values_data = data.values.tolist() # list of all values
+            values.extend(values_data)
+            group_list_data = [] # list of all unique values in group
+            group_list.extend(group_list_data)
+            for i in range(0,len(headings_data)-1):
+                group_list.append(data[headings_data[i]].unique().tolist())
+        return render_template('data.html', data = data, headings = headings_data, values = values_data, group_list = group_list_data)
+
+@app.route('/cluster', methods = ['GET' , 'POST'])
+def cluster():
+    head = []
+    head.extend(headings)
+    if request.method == "POST":
+        method = request.form.get("methods")
+        req_col = request.form.get("headings")
+        req_rad = request.form["radius"]
+        print(method)
+        print(req_col)
+        print(req_rad)
+        column = []
+        ele = []
+        group_lst= []
+        column.extend(headings)
+        ele.extend(values)
+        group_lst.extend(group_list)
+        for i in range(0,len(column)):
+            if column[i] == req_col:
+                para2 = group_lst[i]
+        if method is not "n_gram":
+            cluster = method_using(method,para2,float(req_rad))
+        else:
+            cluster = method_using(method,para2,int(req_rad))
+        return render_template('clustered.html', col = column, ele = ele, group_lst = group_lst, cluster = cluster)
+    return render_template('cluster.html', head = head)
+
+@app.route('/clustered', methods=["POST","GET"])
+def clustered():
+    return render_template("clustered.html")
+
 
 @app.route('/csv2json', methods=["POST"])
 def c2j():
 	f = request.files['data_file']
 	if not f:
 		return "No file"
-	file_contents = StringIO(f.stream.read())
+	file_contents = io.StringIO(f.stream.read().decode('utf-8'))
 	result = csv2json(file_contents)
 	response = make_response(result)
 	response.headers["Content-Disposition"] = "attachment; filename=Converted.json"
@@ -157,24 +242,13 @@ def c2j():
 def convert():
 	return render_template('convert.html')
 
-def process_file(path, filename):
-    convert(path, filename)
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
-
 @app.route('/project', methods = ['POST','GET'])
 def project():
     return render_template("project.html")
 
-@app.errorhandler(500)
-def internal_error(error):
-    return "Invalid input, try again!!!"
-
-@app.errorhandler(404)
-def not_found(error):
-    return "No Directory matches the satisfaction",404
+# @app.errorhandler(Exception)
+# def all_exception_handler(error):
+#     return "Error: " + str(error.code)
 
 mongo = PyMongo(app)
 if __name__  == "__main__" :
